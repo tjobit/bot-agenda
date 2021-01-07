@@ -1,0 +1,19 @@
+{
+  "name": "discord.js-template",
+  "version": "0.0.1",
+  "main": "src/index",
+  "author": "MenuDocs",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^7.17.0",
+    "eslint-config-tesseract": "^0.0.2"
+  },
+  "dependencies": {
+    "ascii-cats": "^1.1.1",
+    "canvas": "^2.6.1",
+    "discord.js": "^12.5.1",
+    "glob": "^7.1.6",
+    "path": "^0.12.7",
+    "util": "^0.12.3"
+  }
+}
