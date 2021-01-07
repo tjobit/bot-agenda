@@ -1,4 +1,6 @@
+require("better-logging")(console);
 const Discord = require("discord.js");
+const compteur = require("./compteur");
 
 /**
  * Création de l'embed pour l'affichage des devoirs
@@ -15,6 +17,7 @@ const devoirEmbed = (matiere, date, intitule, auteur, numDevoir) => {
 		.addFields(
 			{ name: "Date de remise :", value: date },
 			{ name: "Devoirs :", value: intitule },
+			{ name: "Jour(s) restants avant remise :", value: compteur.compteur(date) }
 		)
 		.setColor("#FFFF00")
 		.setFooter(numDevoir)

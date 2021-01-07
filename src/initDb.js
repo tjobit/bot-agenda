@@ -1,3 +1,4 @@
+require("better-logging")(console);
 const utils = require("./utils");
 
 /**
@@ -14,7 +15,7 @@ const groupInit = (db,msg) => {
 		db.groups.forEach(group => {
 			// Si la db a deja été initialisée dans ce channel
 			if (group.channelId === id) {
-				console.log("duplicate found");
+				console.warn("Salon déjà dans l'agenda");
 				groupFound = true;
 				return;
 			}
@@ -33,7 +34,7 @@ const groupInit = (db,msg) => {
 		});
 
 		utils.updateDbFile(db);
-		console.log("Groupe ajouté : " + channelName);
+		console.info("Nouveau groupe enregistré dans la base : " + channelName);
 
 		utils.tempMsg(`Ce salon est désormais l'agenda : ${channelName}`, msg.channel);
 	} catch (e) {

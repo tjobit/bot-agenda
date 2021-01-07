@@ -1,3 +1,4 @@
+require("better-logging")(console);
 const embed = require("./embeds");
 const fs = require("fs");
 const matDB = require("./matieres.json");
@@ -33,17 +34,18 @@ const tempMsg = (content, channel, time = 5000) => {
  * @param question Le text de la question que le bot posera
  * @return la premesse qui resoud un tableau de deux elements : [Reponse utilisateur , Message du bot comprenent la question]
  */
-const getResponse = async function (msg, question, help = null) {
-	let questMsg = await msg.channel.send(embed.questionEmbed(question, help));
+const getResponse = async (msg, question, help = null) => {
+	let questMsg = await msg.channel.send(embed.questionEmbed(question, help)).catch(e => { console.error(e); });
 	return new Promise(
 		function (resolve) {
 			const filter = m => m.author.id === msg.author.id;
 			msg.channel.awaitMessages(filter, { max: 1, time: 30000, errors: ["time"] })
 				.then(collected => {
 					resolve([collected.first(), questMsg]);
-					questMsg.edit(embed.questionEmbed(question, trouverMatière( collected.first().content )));
+					questMsg.edit(embed.questionEmbed(question, trouverMatière(collected.first().content)));
 				})
 				.catch(() => {
+					console.warn("Question timeout");
 					tempMsg("Annulation : temps de réponse trop long", msg.channel, 2);
 					if (questMsg)
 						questMsg.delete();
@@ -58,15 +60,15 @@ const getResponse = async function (msg, question, help = null) {
  */
 const updateDbFile = (db) => {
 	try {
-		fs.writeFileSync("./devoirs.json", JSON.stringify(db));
+		fs.writeFileSync("./src/devoirs.json", JSON.stringify(db));
 	} catch (e) {
-		console.error(e);
+		console.error("Impossible de mettre à jour le fichier de la base");
 	}
 
 	// if(db.groups.length > 0)
 	// 	fs.writeFileSync("./src/db.back", JSON.stringify(db));
 
-	console.log("BD MISE A JOUR ! (Backups non actif)");
+	console.info("Fichier mise à jour");
 };
 
 /**
@@ -75,9 +77,9 @@ const updateDbFile = (db) => {
  * @param msg le message d'origine
  */
 const debugDbFile = (db, msg) => {
-	console.log("debug");
-	msg.reply("```" + JSON.stringify(db, null, 4) + "```");
+	msg.reply("```" + JSON.stringify(db, null, 4) + "```").catch(() => { console.log(" DB trop grande "); });
 	msg.delete();
+	console.info("Discord debug");
 };
 
 /**
@@ -124,7 +126,7 @@ const dateValide = (date) => {
 const trouverMatière = (source) => {
 	matDB.matières.forEach(mat => {
 		mat.alias.forEach(alias => {
-			if(source.toUpperCase().includes(alias.toUpperCase())){
+			if (source.toUpperCase().includes(alias.toUpperCase())) {
 				source = mat.nom;
 			}
 		});

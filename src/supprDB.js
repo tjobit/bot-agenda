@@ -1,3 +1,4 @@
+require("better-logging")(console);
 const utils = require("./utils");
 
 /**

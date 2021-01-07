@@ -1,3 +1,4 @@
+require("better-logging")(console);
 const Discord = require("discord.js");
 const botClient = new Discord.Client();
 const config = require("../config.json");
@@ -12,8 +13,6 @@ const suppr = require("./supprDB");
 const modif = require("./modifDB");
 const compteur = require("./compteur");
 
-let db = require("./devoirs.json");
-
 /**
  * Au démarrage du bot
  */
@@ -22,19 +21,23 @@ botClient.on("ready", () => {
 	botClient.user.setActivity("!help-agenda");
 
 	console.clear();
-	console.log("=============================");
-	console.log(asciiCats("nyan"));
-	console.log("\n\n Bot started !");
-	console.log("=============================");
-	
+	console.log(
+		"\n=============================\n"
+		+ asciiCats("nyan")
+		+ "\n\n Bot started ! "
+		+ "\n============================="
+	);
+
 });
 
 /**
  * Des qu'un message sur le serveur ou le bot est présent est reçu
  */
 botClient.on("message", msg => {
+	let db = require("./devoirs.json");
+
+
 	suppr.supprDevoirDate(db, msg);
-	compteur.compteur(db, msg);
 
 	//On regarde si le message commence bien par le prefix (!)
 	if (!msg.content.startsWith(config.prefix))//Si le message ne commence pas par le prefix du config.json
@@ -65,20 +68,20 @@ botClient.on("message", msg => {
 		suppr.supprDb(db, msg);
 		break;
 
-	case "modif-agenda" :
+	case "modif-agenda":
 		modif.modifDB(db, msg);
 		break;
 
 	default:
-		console.log("Commande non reconnue : " + msg.content);
+		console.warn("Commande non reconnue : " + msg.content);
+		compteur.majDevoirs(db, botClient);
+		compteur.rappel(db, msg);
 		break;
 	}
 
 	if (msg)
 		if (msg.deletable)
-			msg.delete()
-				.then(() => { console.log("Message supprimé"); })
-				.catch(() => { console.error("Message déjà supprimé"); });
+			msg.delete().catch(() => { console.debug("msg supprimé avant la fin d'execution (Ceci n'est pas un problème)"); });
 
 });
 

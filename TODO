@@ -1,14 +1,14 @@
 - Faire un rappel la veille de la remise
-- Ajouter l'heure (optionnel)
-- Ajouter le lien de remise (optionnel)
+(- Ajouter l'heure (optionnel)
+- Ajouter le lien de remise (optionnel))
 *- Par groupe
 *- Supprimer le message de la personne qui a ajouté le devoir
 *- Un embed par devoir (Matière, date, intitulé, img de la Matière)
 *- backup automatique
 *- Proposition de matière
 *- Supprimer le devoir quand la date est passée
-- Join code d'ajout et modif
-- Compteur de jour restants
+*- Join code d'ajout et modif
+*- Compteur de jour restants
 
 Commandes :
 *- Initialiser un salon -> groupe a stocker
