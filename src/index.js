@@ -25,6 +25,7 @@ botClient.on("ready", () => {
 		"\n=============================\n"
 		+ asciiCats("nyan")
 		+ "\n\n Bot started ! "
+		+ "\n Tomm Jobit - Riboulet Célian (feat Victor LP)"
 		+ "\n============================="
 	);
 
@@ -58,7 +59,7 @@ botClient.on("message", msg => {
 
 	case "clear-db":
 		db = utils.clearDbFile(db, msg);
-		break;
+		return;
 
 	case "help-agenda":
 		msg.channel.send(embed.helpEmbed());

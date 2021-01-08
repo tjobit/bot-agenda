@@ -56,7 +56,7 @@ const compteur = (date) => {
 	const monthDevoir = parseInt(splitArr[1]);
 	dateDevoir = new Date(2021, monthDevoir - 1, dayDevoir + 1);
 
-	return datediff(today, dateDevoir);
+	return datediff(today, dateDevoir)-1;
 };
 
 function datediff(first, second) {
@@ -68,7 +68,7 @@ function datediff(first, second) {
 async function rappel(db, msg) {
 	for (let i = 0; i < db.groups.length; i++) {
 		for (let j = 0; j < db.groups[i].devoirs.length; j++) {
-			if (db.groups[i].devoirs[j].jours === 1) {
+			if (db.groups[i].devoirs[j].jours < 1 && db.groups[i].devoirs[j].jours >= 0) {
 				const embedID = db.groups[i].devoirs[j].embedId;
 				msg.channel.messages.fetch(embedID)
 					.then(embed => {
@@ -83,8 +83,8 @@ async function rappel(db, msg) {
 					msg.author.username, db.groups[i].devoirs[j].numéro
 				);
 
-				finalEmbed.setColor("#ff5b4f");
-				finalEmbed.fields[2].value = "Pour demain";
+				finalEmbed.setColor(db.groups[i].devoirs[j].jours == 0 ? "#ff5b4f" : "#ff9b21");
+				finalEmbed.fields[2].value = db.groups[i].devoirs[j].jours == 0 ? "Pour aujourd'hui" : "Pour demain";
 
 				const msgFinalEmbed = await msg.channel.send(finalEmbed);
 		

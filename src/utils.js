@@ -89,7 +89,7 @@ const debugDbFile = (db, msg) => {
  */
 const clearDbFile = (db, msg) => {
 	msg.delete();
-	db = { "groups": [] };
+	db = JSON.parse('{ "groups": [] }');
 	updateDbFile(db);
 	console.warn("DATABASE RESET");
 	return db;
