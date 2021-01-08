@@ -36,7 +36,7 @@ const tempMsg = (content, channel, time = 5000) => {
  * @param help un message en dessous de la question (facultatif)
  * @return la premesse qui resoud un tableau de deux elements : [Reponse utilisateur , Message du bot comprenent la question]
  */
-const getResponse = async (msg, question, help = null) => {
+const getResponse = async (msg, question, help = null, questionMsgList = null) => {
 	let questMsg = await msg.channel.send(embed.questionEmbed(question, help)).catch(e => { console.error(e); });
 	return new Promise(
 		function (resolve) {
@@ -51,6 +51,12 @@ const getResponse = async (msg, question, help = null) => {
 					tempMsg("Annulation : temps de réponse trop long", msg.channel, 2);
 					if (questMsg)
 						questMsg.delete();
+					if (questionMsgList != null) {
+						//On supprime tous les messages contenant les questions
+						questionMsgList.forEach(element => {
+							element.delete().catch(() => console.debug("Message de question déjà supprimé"));
+						});
+					}
 				});
 		}
 	);
@@ -67,7 +73,7 @@ const updateDbFile = (db) => {
 		console.error("Impossible de mettre à jour le fichier de la base");
 	}
 
-	if(db.groups.length > 0)
+	if (db.groups.length > 0)
 		fs.writeFileSync("./src/db.back", JSON.stringify(db));
 
 	console.info("Fichier mit à jour");

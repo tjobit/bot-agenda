@@ -15,14 +15,15 @@ const formEmbed = async (msg, devoirs) => {
 	let questionsMsgList = [];
 
 	//Demande de la matière
-	const matiereQuestionResults = await utils.getResponse(msg, "Dans quelle matière souhaitez vous ajouter ce devoir ?");
+	const matiereQuestionResults = await utils.getResponse(msg, "Dans quelle matière souhaitez vous ajouter ce devoir ?", null, questionsMsgList);
+
 	const matiere = utils.trouverMatière(matiereQuestionResults[0].content);
 	console.log(">matiere : " + matiere);
 	matiereQuestionResults[0].delete();
 	questionsMsgList.push(matiereQuestionResults[1]);
 
 	//Demande de l'intitulé
-	const intituleQuestionResults = await utils.getResponse(msg, "Quel est l'intitulé du devoir ?");
+	const intituleQuestionResults = await utils.getResponse(msg, "Quel est l'intitulé du devoir ?", null, questionsMsgList);
 	const intitule = intituleQuestionResults[0].content;
 	console.log(">intitulé : " + intitule);
 	intituleQuestionResults[0].delete();
@@ -37,9 +38,12 @@ const formEmbed = async (msg, devoirs) => {
 			dateQuestionResults[1].delete().catch(() => console.warn("Message de la question de date déjà supprimé"));
 
 		dateQuestionResults = await utils.getResponse(
-			msg, erreurDate ?
+			msg,
+			erreurDate ?
 				"Date invalide, réssayez avec le bon format (JJ/MM)" :
-				"Quel est la date de remise du devoir ? (JJ/MM)"
+				"Quel est la date de remise du devoir ? (JJ/MM)",
+			null,
+			questionsMsgList
 		);
 
 		date = dateQuestionResults[0].content;

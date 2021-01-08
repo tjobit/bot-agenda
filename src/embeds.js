@@ -32,7 +32,7 @@ const devoirEmbed = (matiere, date, intitule, auteur, numDevoir) => {
 const helpEmbed = () => {
 	const exampleEmbed = new Discord.MessageEmbed().setTitle("Aide BotAgenda")
 		.addFields(
-			{ name: "Initialiser agenda :", value: "!init-agenda" },
+			{ name: "Initialiser agenda (Obligatoire) :", value: "!init-agenda" },
 			{ name: "Ajouter un devoir :", value: "!agenda" },
 			{ name: "Supprimer un devoir :", value: "!suppr-agenda" },
 			{ name: "Modifier un devoir :", value: "!modif-agenda" },
