@@ -37,8 +37,8 @@ const helpEmbed = () => {
 			{ name: "Supprimer un devoir :", value: "!suppr-agenda" },
 			{ name: "Modifier un devoir :", value: "!modif-agenda" },
 		)
-		.setColor("#FFFF00")
-		// .setImage("https://www.u-bordeaux.fr/var/ezdemo_site/storage/images/media/site-institutionnel/images/images-blandine-test/banniere-idv-gif-anime/16065-1-fre-FR/Banniere-idv-gif-anime_Grande.gif");
+		.setColor("#FFFF00");
+	// .setImage("https://www.u-bordeaux.fr/var/ezdemo_site/storage/images/media/site-institutionnel/images/images-blandine-test/banniere-idv-gif-anime/16065-1-fre-FR/Banniere-idv-gif-anime_Grande.gif");
 	return exampleEmbed;
 };
 

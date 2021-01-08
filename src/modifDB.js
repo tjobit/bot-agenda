@@ -1,13 +1,14 @@
 require("better-logging")(console);
 const utils = require("./utils");
 const formEmbedCreator = require("./formEmbedCreator");
+const compteur = require("./compteur");
 
 /**
  * Modifie la db et l'embed correspondant au devoir
  * @param db le contenu de la db
  * @param msg le message originel
  */
-const modifDb = async (db, msg) => {
+const modifDb = async (db, msg, botClient) => {
 
 	console.info("Modification d'un devoir");
 
@@ -72,13 +73,14 @@ const modifDb = async (db, msg) => {
 			});
 
 			utils.tempMsg(`Devoir ${modif} modifié !`, msg.channel, 2);
-			return;
 		}
 	}
 	
 	utils.updateDbFile(db);
 
 	console.info("Devoir modifié");
+
+	compteur.majDevoirs(db,botClient);
 };
 
 exports.modifDB = modifDb;

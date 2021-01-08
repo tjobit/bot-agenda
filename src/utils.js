@@ -21,6 +21,7 @@ const getGroupByID = (groups, id) => {
  * Affiche le message donné, puis le supprime après 5sec
  * @param content le contenu du message a envoyer
  * @param channel dans lequel va être envoyé le message
+ * @param time le temps avant que le message soit supprimé en ms (facultatif)
  */
 const tempMsg = (content, channel, time = 5000) => {
 	channel.send(embed.questionEmbed(content)).then(botMsg => {
@@ -32,6 +33,7 @@ const tempMsg = (content, channel, time = 5000) => {
  * Pose une question à l'utilisateur via Discord et renvois sa reponse ainsi que le message du bot comprenant la question
  * @param msg le message d'origine
  * @param question Le text de la question que le bot posera
+ * @param help un message en dessous de la question (facultatif)
  * @return la premesse qui resoud un tableau de deux elements : [Reponse utilisateur , Message du bot comprenent la question]
  */
 const getResponse = async (msg, question, help = null) => {
@@ -65,10 +67,10 @@ const updateDbFile = (db) => {
 		console.error("Impossible de mettre à jour le fichier de la base");
 	}
 
-	// if(db.groups.length > 0)
-	// 	fs.writeFileSync("./src/db.back", JSON.stringify(db));
+	if(db.groups.length > 0)
+		fs.writeFileSync("./src/db.back", JSON.stringify(db));
 
-	console.info("Fichier mise à jour");
+	console.info("Fichier mit à jour");
 };
 
 /**
@@ -89,6 +91,7 @@ const debugDbFile = (db, msg) => {
  */
 const clearDbFile = (db, msg) => {
 	msg.delete();
+	// eslint-disable-next-line quotes
 	db = JSON.parse('{ "groups": [] }');
 	updateDbFile(db);
 	console.warn("DATABASE RESET");
@@ -123,6 +126,11 @@ const dateValide = (date) => {
 	return true;
 };
 
+/**
+ * Corrige le nom de la matière si trouvé dans le fichier 
+ * @param source le message a corriger 
+ * @return le nom de la matière corrigé si trouvé, sinon return le message original
+ */
 const trouverMatière = (source) => {
 	matDB.matières.forEach(mat => {
 		mat.alias.forEach(alias => {

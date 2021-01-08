@@ -4,6 +4,7 @@ const botClient = new Discord.Client();
 const config = require("../config.json");
 
 const asciiCats = require("ascii-cats");
+const cron = require("cron");
 
 const embed = require("./embeds");
 const ajout = require("./ajoutDB");
@@ -29,6 +30,13 @@ botClient.on("ready", () => {
 		+ "\n============================="
 	);
 
+	let scheduledMessage = new cron.CronJob("00 00 01 * * *", () => {
+		compteur.majDevoirs(require("./devoirs.json"), botClient);
+		console.info("cron update");
+	});
+
+	scheduledMessage.start();
+
 });
 
 /**
@@ -45,39 +53,37 @@ botClient.on("message", msg => {
 		return;
 
 	switch (msg.content.substr(1).split(" ")[0]) {//Switch sur le premier mot du msg sans le prefix Ex: "!agenda dejfez" donne "agenda"
-	case "init-agenda":
-		init.groupInit(db, msg);
-		break;
+		case "init-agenda":
+			init.groupInit(db, msg);
+			break;
 
-	case "agenda":
-		ajout.ajoutDb(db, msg);
-		break;
+		case "agenda":
+			ajout.ajoutDb(db, msg, botClient);
+			break;
 
-	case "debug":
-		utils.debugDbFile(db, msg);
-		break;
+		case "debug":
+			utils.debugDbFile(db, msg);
+			break;
 
-	case "clear-db":
-		db = utils.clearDbFile(db, msg);
-		return;
+		case "clear-db":
+			utils.clearDbFile(db, msg);
+			return;
 
-	case "help-agenda":
-		msg.channel.send(embed.helpEmbed());
-		break;
+		case "help-agenda":
+			msg.channel.send(embed.helpEmbed());
+			break;
 
-	case "suppr-agenda":
-		suppr.supprDb(db, msg);
-		break;
+		case "suppr-agenda":
+			suppr.supprDb(db, msg);
+			break;
 
-	case "modif-agenda":
-		modif.modifDB(db, msg);
-		break;
+		case "modif-agenda":
+			modif.modifDB(db, msg, botClient);
+			break;
 
-	default:
-		console.warn("Commande non reconnue : " + msg.content);
-		compteur.majDevoirs(db, botClient);
-		compteur.rappel(db, msg);
-		break;
+		default:
+			console.warn("Commande non reconnue : " + msg.content);
+			break;
 	}
 
 	if (msg)

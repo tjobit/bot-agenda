@@ -12,6 +12,7 @@
     "ascii-cats": "^1.1.1",
     "better-logging": "^4.4.0",
     "canvas": "^2.6.1",
+    "cron": "^1.8.2",
     "discord.js": "^12.5.1",
     "glob": "^7.1.6",
     "path": "^0.12.7",

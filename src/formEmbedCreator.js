@@ -69,6 +69,11 @@ const formEmbed = async (msg, devoirs) => {
 	);
 };
 
+/**
+ * Calcule le numéro du devoir
+ * @param devoirs les devoirs
+ * @return le numéro du devoir
+ */
 const getNewDevoirNum = (devoirs) => {
 	let numDevoir = 1;
 	for (let i = 0; i < devoirs.length; i++) {

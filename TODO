@@ -1,4 +1,4 @@
-- Faire un rappel la veille de la remise
+*- Faire un rappel la veille de la remise
 (- Ajouter l'heure (optionnel)
 - Ajouter le lien de remise (optionnel))
 *- Par groupe
@@ -20,7 +20,7 @@ Commandes :
 *- Modifier
 
 
-
+/!\ Erreur sur le nb jours avant remise (décallage d'un jour)
 
 
 
