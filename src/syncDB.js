@@ -20,7 +20,7 @@ const syncDB = async (db, botClient) => {
 //Check si existe dans son salon, si il doit etre ajouté ou supr ou edité
 const syncDevoir = async (db, channel, devoir) => {
 
-	const devoirEmbed = embed.devoirEmbed(devoir.matière, devoir.date, devoir.intitulé, devoir.numéro);
+	const devoirEmbed = embed.devoirEmbed(devoir.matière, devoir.date, devoir.intitulé, devoir.numéro, devoir.jours);
 
 	if (devoir.embedId == null) {
 		await channel.send(devoirEmbed)

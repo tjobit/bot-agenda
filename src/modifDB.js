@@ -44,12 +44,11 @@ const modifDb = async (db, msg, botClient) => {
 		return;
 	}
 
-
-	let finalEmbed = await formEmbedCreator.formEmbed(msg, db.groups[groupID].devoirs);
-
+	
+	let formResult = await formEmbedCreator.formEmbed(msg, db);
+	
 	for (let i = 0; i < db.groups[groupID].devoirs.length; i++) {
 		if (db.groups[groupID].devoirs[i].numéro == modif) {
-
 			const embedID = db.groups[groupID].devoirs[i].embedId;
 
 			// Suppression du devoir a modifier dans la bd
@@ -58,11 +57,11 @@ const modifDb = async (db, msg, botClient) => {
 			// Rajout du nouveau devoir dans la bd
 			db.groups[groupID].devoirs.push({
 				"embedId": embedID,
-				"matière": finalEmbed.title,
-				"numéro": parseInt(finalEmbed.footer.text),
-				"date": finalEmbed.fields[0].value,
-				"intitulé": finalEmbed.fields[1].value,
-				"jours": parseInt(finalEmbed.fields[2].value)
+				"matière": formResult.embed.title,
+				"numéro": parseInt(formResult.embed.footer.text),
+				"date": formResult.embed.fields[0].value,
+				"intitulé": formResult.embed.fields[1].value,
+				"jours": parseInt(formResult.jour),
 			});
 
 			utils.tempMsg(`Devoir ${modif} modifié !`, msg.channel, 2);
@@ -74,6 +73,7 @@ const modifDb = async (db, msg, botClient) => {
 	console.info("Devoir modifié");
 
 	syncDB.syncDB(db, botClient);
+
 };
 
 exports.modifDB = modifDb;

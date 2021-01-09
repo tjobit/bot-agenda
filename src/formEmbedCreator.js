@@ -1,6 +1,7 @@
 require("better-logging")(console);
 const utils = require("./utils");
 const embed = require("./embeds");
+const compteur = require("./compteur");
 
 /**
  * Lance le questionnaire de création du formulaire
@@ -63,13 +64,18 @@ const formEmbed = async (msg, db) => {
 
 	console.log(">====================");
 
+	const jours = compteur.compteur(date);
 	//On retourne l'embed final contenant les reponses aux question
-	return embed.devoirEmbed(
-		matiere,
-		date,
-		intitule,
-		numDevoir
-	);
+	return {
+		embed: 	embed.devoirEmbed(
+			matiere,
+			date,
+			intitule,
+			numDevoir,
+			jours
+		),
+		jour: jours
+	};
 };
 
 /**
@@ -82,8 +88,8 @@ const getNewDevoirNum = (db) => {
 	let trouve = true;
 	while(trouve){
 		trouve = false;
-		for(let i = 0; i < db.groups.lenght; i++){
-			for(let j = 0; j < db.groups[i].devoirs.lenght; j++){
+		for(let i = 0; i < db.groups.length; i++){
+			for(let j = 0; j < db.groups[i].devoirs.length; j++){
 				if(id === db.groups[i].devoirs[j].numéro){
 					trouve = true;
 					id = Math.floor(Math.random() * 1000);
@@ -95,4 +101,3 @@ const getNewDevoirNum = (db) => {
 };
 
 exports.formEmbed = formEmbed;
-exports.getNewDevoirNum = getNewDevoirNum;

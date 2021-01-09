@@ -148,6 +148,22 @@ const trouverMatière = (source) => {
 	return source;
 };
 
+const libelleJour = (jours) => {
+	if(jours === 0)
+		return "Pour aujourd'hui";
+	if(jours === 1)
+		return "Pour demain";
+	if(jours === 2)
+		return "Pour après-demain";	
+	if(jours === 7)
+		return "Pour dans une semaine";
+	if(jours >= 28 && jours < 250)
+		return "Pour dans un mois";
+	if(jours >= 250)
+		return "Pour dans trop longtemps (tu t'es pas trompé de date ?)";
+	return jours + " jours";
+};
+
 exports.getGroupByID = getGroupByID;
 exports.tempMsg = tempMsg;
 exports.updateDbFile = updateDbFile;
@@ -156,3 +172,4 @@ exports.clearDbFile = clearDbFile;
 exports.getResponse = getResponse;
 exports.dateValide = dateValide;
 exports.trouverMatière = trouverMatière;
+exports.libelleJour = libelleJour;

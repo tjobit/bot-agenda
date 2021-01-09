@@ -73,7 +73,7 @@ botClient.on("message", msg => {
 			break;
 
 		case "suppr-agenda":
-			suppr.supprDb(db, msg);
+			suppr.supprDb(db, msg, botClient);
 			break;
 
 		case "modif-agenda":

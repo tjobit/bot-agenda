@@ -1,7 +1,6 @@
 require("better-logging")(console);
 const utils = require("./utils");
 const formEmbedCreator = require("./formEmbedCreator");
-// const compteur = require("./compteur");
 const syncDB = require("./syncDB");
 
 /**
@@ -21,20 +20,16 @@ const ajoutDb = async (db, msg, botClient) => {
 		utils.tempMsg("Ce salon n'est pas un agenda (!help-agenda)", msg.channel);
 		return;
 	}
-
-	let finalEmbed = await formEmbedCreator.formEmbed(msg, db);
 	
-	// const devoirMsg = await msg.reply(finalEmbed);
-
-	// const embedID = devoirMsg.id;
+	let formResult = await formEmbedCreator.formEmbed(msg, db);
 
 	db.groups[groupID].devoirs.push({
 		"embedId": null,
-		"matière": finalEmbed.title,
-		"numéro": parseInt(finalEmbed.footer.text),
-		"date": finalEmbed.fields[0].value,
-		"intitulé": finalEmbed.fields[1].value,
-		"jours": parseInt(finalEmbed.fields[2].value)
+		"matière": formResult.embed.title,
+		"numéro": parseInt(formResult.embed.footer.text),
+		"date": formResult.embed.fields[0].value,
+		"intitulé": formResult.embed.fields[1].value,
+		"jours": parseInt(formResult.jour),
 	});
 
 	utils.updateDbFile(db);

@@ -31,7 +31,14 @@ const supprDb = async (db, msg) => {
 
 	for (let i = 0; i < db.groups[groupID].devoirs.length; i++) {
 		if (db.groups[groupID].devoirs[i].numéro == suppr) {
-			
+
+			msg.channel.messages.fetch(db.groups[groupID].devoirs[i].embedId)
+				.then(embed => {
+					embed.delete();
+				}).catch(e => {
+					console.error(e);
+				});
+
 			db.groups[groupID].devoirs.splice(i, 1);
 			utils.updateDbFile(db);
 			utils.tempMsg(`Devoir ${suppr} supprimé !`, msg.channel);
@@ -40,9 +47,6 @@ const supprDb = async (db, msg) => {
 	}
 
 	utils.tempMsg("Aucun devoir avec ce numéro dans l'agenda", msg.channel);
-
-	
-
 };
 
 exports.supprDb = supprDb;
