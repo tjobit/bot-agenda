@@ -11,18 +11,29 @@ const compteur = require("./compteur");
  * @param numDevoir numéro du devoir dans la db
  * @return l'embed mis en forme
  */
-const devoirEmbed = (matiere, date, intitule, auteur, numDevoir) => {
+const devoirEmbed = (matiere, date, intitule, numDevoir) => {
+	let jours = compteur.compteur(date);
+	let couleur = "#FFFF00";
+
+	if(jours == 0){
+		jours = "Pour aujourd'hui";
+		couleur = "#ff5b4f";
+	} else if(jours == 1){
+		jours = "Pour demain";
+		couleur = "#ff9b21";
+	}
+	
 	const exampleEmbed = new Discord.MessageEmbed().setTitle(matiere)
-		.setAuthor(auteur)
 		.addFields(
 			{ name: "Date de remise :", value: date },
 			{ name: "Devoirs :", value: intitule },
-			{ name: "Jour(s) restants avant remise :", value: compteur.compteur(date) }
+			{ name: "Jour(s) restants avant remise :", value: jours }
 		)
-		.setColor("#FFFF00")
+		.setColor(couleur)
 		.setFooter(numDevoir)
 		.setTimestamp();
 	return exampleEmbed;
+	
 };
 
 /**

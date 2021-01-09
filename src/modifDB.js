@@ -1,7 +1,7 @@
 require("better-logging")(console);
 const utils = require("./utils");
 const formEmbedCreator = require("./formEmbedCreator");
-const compteur = require("./compteur");
+const syncDB = require("./syncDB");
 
 /**
  * Modifie la db et l'embed correspondant au devoir
@@ -52,13 +52,6 @@ const modifDb = async (db, msg, botClient) => {
 
 			const embedID = db.groups[groupID].devoirs[i].embedId;
 
-			msg.channel.messages.fetch(embedID)
-				.then(embed => {
-					embed.edit(finalEmbed);
-				}).catch(e => {
-					console.error(e);
-				});
-
 			// Suppression du devoir a modifier dans la bd
 			db.groups[groupID].devoirs.splice(i, 1);
 
@@ -80,7 +73,7 @@ const modifDb = async (db, msg, botClient) => {
 
 	console.info("Devoir modifié");
 
-	compteur.majDevoirs(db,botClient);
+	syncDB.syncDB(db, botClient);
 };
 
 exports.modifDB = modifDb;

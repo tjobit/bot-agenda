@@ -1,7 +1,8 @@
 require("better-logging")(console);
 const utils = require("./utils");
 const formEmbedCreator = require("./formEmbedCreator");
-const compteur = require("./compteur");
+// const compteur = require("./compteur");
+const syncDB = require("./syncDB");
 
 /**
  * Ajoute un devoir dans la base de donnée à partir d'un equestionnaire 
@@ -21,14 +22,14 @@ const ajoutDb = async (db, msg, botClient) => {
 		return;
 	}
 
-	let finalEmbed = await formEmbedCreator.formEmbed(msg, db.groups[groupID].devoirs);
+	let finalEmbed = await formEmbedCreator.formEmbed(msg, db);
 	
-	const devoirMsg = await msg.reply(finalEmbed);
+	// const devoirMsg = await msg.reply(finalEmbed);
 
-	const embedID = devoirMsg.id;
+	// const embedID = devoirMsg.id;
 
 	db.groups[groupID].devoirs.push({
-		"embedId": embedID,
+		"embedId": null,
 		"matière": finalEmbed.title,
 		"numéro": parseInt(finalEmbed.footer.text),
 		"date": finalEmbed.fields[0].value,
@@ -40,7 +41,7 @@ const ajoutDb = async (db, msg, botClient) => {
 
 	console.info("Devoir ajouté");
 
-	compteur.majDevoirs(db,botClient);
+	syncDB.syncDB(db,botClient);
 };
 
 exports.ajoutDb = ajoutDb;

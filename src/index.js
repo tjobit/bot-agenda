@@ -12,7 +12,7 @@ const utils = require("./utils");
 const init = require("./initDb");
 const suppr = require("./supprDB");
 const modif = require("./modifDB");
-const compteur = require("./compteur");
+const syncDB = require("./syncDB");
 
 /**
  * Au démarrage du bot
@@ -31,11 +31,13 @@ botClient.on("ready", () => {
 	);
 
 	let scheduledMessage = new cron.CronJob("00 00 01 * * *", () => {
-		compteur.majDevoirs(require("./devoirs.json"), botClient);
+		syncDB.syncDB(require("./devoirs.json"), botClient);
 		console.info("cron update");
 	});
 
 	scheduledMessage.start();
+
+	syncDB.syncDB(require("./devoirs.json"), botClient);
 
 });
 
@@ -44,9 +46,6 @@ botClient.on("ready", () => {
  */
 botClient.on("message", msg => {
 	let db = require("./devoirs.json");
-
-
-	suppr.supprDevoirDate(db, msg);
 
 	//On regarde si le message commence bien par le prefix (!)
 	if (!msg.content.startsWith(config.prefix))//Si le message ne commence pas par le prefix du config.json

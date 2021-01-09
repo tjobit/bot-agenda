@@ -7,7 +7,7 @@ const embed = require("./embeds");
  * @param msg le message d'origine
  * @param groupsArr db.groups[?]
  */
-const formEmbed = async (msg, devoirs) => {
+const formEmbed = async (msg, db) => {
 
 	console.log(">=======[FORM]=======");
 
@@ -59,7 +59,7 @@ const formEmbed = async (msg, devoirs) => {
 	});
 
 	//On recupère le numéro de devoir qui sera assigné à ce nouveau devoir (Utilisé si le frmulaire est la pour une création)
-	let numDevoir = getNewDevoirNum(devoirs);
+	let numDevoir = getNewDevoirNum(db);
 
 	console.log(">====================");
 
@@ -68,7 +68,6 @@ const formEmbed = async (msg, devoirs) => {
 		matiere,
 		date,
 		intitule,
-		msg.author.username,
 		numDevoir
 	);
 };
@@ -78,13 +77,21 @@ const formEmbed = async (msg, devoirs) => {
  * @param devoirs les devoirs
  * @return le numéro du devoir
  */
-const getNewDevoirNum = (devoirs) => {
-	let numDevoir = 1;
-	for (let i = 0; i < devoirs.length; i++) {
-		if (numDevoir <= devoirs[i].numéro)
-			numDevoir = devoirs[i].numéro + 1;
+const getNewDevoirNum = (db) => {
+	let id = Math.floor(Math.random() * 1000);
+	let trouve = true;
+	while(trouve){
+		trouve = false;
+		for(let i = 0; i < db.groups.lenght; i++){
+			for(let j = 0; j < db.groups[i].devoirs.lenght; j++){
+				if(id === db.groups[i].devoirs[j].numéro){
+					trouve = true;
+					id = Math.floor(Math.random() * 1000);
+				}
+			}
+		}
 	}
-	return numDevoir;
+	return id;
 };
 
 exports.formEmbed = formEmbed;
