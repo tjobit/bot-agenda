@@ -64,6 +64,10 @@ botClient.on("message", msg => {
 			utils.debugDbFile(db, msg);
 			break;
 
+		case "sync":
+			syncDB.syncDB(db, botClient);
+			break;
+
 		case "clear-db":
 			utils.clearDbFile(db, msg);
 			return;

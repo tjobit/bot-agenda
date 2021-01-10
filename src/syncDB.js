@@ -1,13 +1,17 @@
 require("better-logging")(console);
 const utils = require("./utils");
 const embed = require("./embeds");
+const compteur = require("./compteur");
 
 //Lire la db, lire les channels et syncrhoniser les deux
 const syncDB = async (db, botClient) => {
+	console.info("Synchronisation de la DB !");
+
 	db.groups.forEach(group => {
 		botClient.channels.fetch(group.channelId)
 			.then(channel => {
 				group.devoirs.forEach(devoir => {
+					devoir.jours = compteur.compteur(devoir.date);
 					syncDevoir(db, channel, devoir);
 				});
 			})
@@ -22,7 +26,7 @@ const syncDevoir = async (db, channel, devoir) => {
 
 	const devoirEmbed = embed.devoirEmbed(devoir.matière, devoir.date, devoir.intitulé, devoir.numéro, devoir.jours);
 
-	if (devoir.embedId == null) {
+	if (devoir.embedId == null && devoir.jours >= 0) {
 		await channel.send(devoirEmbed)
 			.then(msg => {
 				console.info(`Message discord du devoir ${devoir.numéro} créé pour la première fois`);
@@ -51,7 +55,7 @@ const syncDevoir = async (db, channel, devoir) => {
 					if (devoir.jours < 0) {
 						msg.delete()
 							.then(() => {
-								console.info(`Message discord du devoir ${devoir.numéro} supprimé car ce devoir est trop vieux`);
+								console.warn(`Message discord du devoir ${devoir.numéro} supprimé du salon et de la db car ce devoir est trop vieux`);
 								supprDbSync(db, devoir.numéro);
 							})
 							.catch(e => { console.error(e); });
@@ -74,7 +78,7 @@ const syncDevoir = async (db, channel, devoir) => {
 };
 
 const messageNonTrouveDansSalonDiscord = (db, devoir, channel, devoirEmbed) => {
-	console.warn("Un devoir de la db ne correpond pas à un message discord");
+	console.warn(`Le devoir ${devoir.numéro} ne correspond à aucun message discord`);
 	//Si il doit encore exister
 	if (devoir.jours >= 0) {
 		channel.send(devoirEmbed)
@@ -85,7 +89,7 @@ const messageNonTrouveDansSalonDiscord = (db, devoir, channel, devoirEmbed) => {
 			.catch(() => console.error(`Impossible de créer le message du devoir ${devoir.numéro}`));
 	} else {//Si ce devoir est dans la db mais plus dans le salon et qu'il doit ne plus exister
 		if (devoir.jours < 0) {
-			console.warn(`Devoir ${devoir.numéro} supprimé de la bd`);
+			console.warn(`Ddevoir ${devoir.numéro} supprimé de la db car ce devoir est trop vieux`);
 			supprDbSync(db, devoir.numéro);
 		}
 	}
@@ -117,8 +121,8 @@ const changeEmbedId = (db, numeroDev, newEmbedId) => {
 const supprDbSync = (db, numeroDev) => {
 	for (let i = 0; i < db.groups.length; i++) {
 		for (let j = 0; j < db.groups[i].devoirs.length; j++) {
-			if (db.groups[i].devoirs[j].numéro === numeroDev) {
-				db.groups[i].devoirs[j].splice(i, 1);
+			if (db.groups[i].devoirs[j].numéro == numeroDev) {
+				db.groups[i].devoirs.splice(j, 1);
 			}
 		}
 	}
