@@ -20,10 +20,12 @@ const devoirEmbed = (matiere, date, intitule, numDevoir, jours) => {
 		couleur = "#ff9b21";
 	}
 	
-	const exampleEmbed = new Discord.MessageEmbed().setTitle(matiere)
+	const exampleEmbed = new Discord.MessageEmbed()
+		.setTitle(matiere)
+		.setURL("https://moodle1.u-bordeaux.fr/")
 		.addFields(
 			{ name: "Date de remise :", value: date },
-			{ name: "Devoirs :", value: intitule },
+			{ name: "Devoir :", value: intitule },
 			{ name: "Temps restant avant remise :", value: utils.libelleJour(jours) }
 		)
 		.setColor(couleur)
