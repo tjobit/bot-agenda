@@ -2,6 +2,7 @@
     "matières": [
         {
             "nom" : "Algo-Prog",
+            "url" : "https://moodle1.u-bordeaux.fr/course/view.php?id=3602",
             "alias": [
                 "ap",
                 "algo",
@@ -12,6 +13,7 @@
         },
         {
             "nom" : "Système",
+            "url" : "https://moodle1.u-bordeaux.fr/course/view.php?id=1438",
             "alias": [
                 "sys",
                 "syst",
@@ -23,6 +25,7 @@
         },
         {
             "nom" : "ACSI-BD",
+            "url" : "https://moodle1.u-bordeaux.fr/course/view.php?id=6064",
             "alias": [
                 "asci",
                 "acsi",
@@ -49,6 +52,7 @@
         },
         {
             "nom" : "WEB",
+            "url" : "https://moodle1.u-bordeaux.fr/course/view.php?id=1844",
             "alias": [
                 "wb",
                 "html",
@@ -58,21 +62,8 @@
             ]
         },
         {
-            "nom" : "PT1",
-            "alias": [
-                "pt",
-                "pt1"
-            ]
-        },
-        {
-            "nom" : "Maths-Discrètes",
-            "alias": [
-                "discret",
-                "discrèt"
-            ]
-        },
-        {
             "nom" : "Algèbre-linéaire",
+            "url" : "https://moodle1.u-bordeaux.fr/course/view.php?id=2373",
             "alias": [
                 "maths",
                 "mathematique",
@@ -106,6 +97,7 @@
         },
         {
             "nom" : "Expression-Communication",
+            "url" : "https://moodle1.u-bordeaux.fr/course/view.php?id=1920",
             "alias": [
                 "expression",
                 "exp",
@@ -115,6 +107,7 @@
         },
         {
             "nom" : "Anglais",
+            "url" : "https://moodle1.u-bordeaux.fr/course/view.php?id=2387",
             "alias": [
                 "anglais",
                 "english",
@@ -124,6 +117,7 @@
         },
         {
             "nom" : "PPP",
+            "url" : "https://moodle1.u-bordeaux.fr/course/view.php?id=1920",
             "alias": [
                 "ppp"
             ]

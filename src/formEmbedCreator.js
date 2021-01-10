@@ -6,7 +6,7 @@ const compteur = require("./compteur");
 /**
  * Lance le questionnaire de création du formulaire
  * @param msg le message d'origine
- * @param groupsArr db.groups[?]
+ * @param db le contenu du fichier devoirs
  */
 const formEmbed = async (msg, db) => {
 
@@ -80,7 +80,7 @@ const formEmbed = async (msg, db) => {
 
 /**
  * Calcule le numéro du devoir
- * @param devoirs les devoirs
+ * @param db le contenu du fichier devoirs
  * @return le numéro du devoir
  */
 const getNewDevoirNum = (db) => {
