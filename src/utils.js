@@ -164,19 +164,19 @@ const libelleJour = (jours) => {
 		return "Pour après-demain";	
 	else if (jours === 7)
 		return "Pour dans une semaine";
-	else if (jours >= 30 && jours <= 30*2)
+	else if (jours >= 30 && jours < 30*2)
 		return "Pour dans 1 mois";
-	else if (jours > (30*2) && jours <= (30*3))
+	else if (jours >= (30*2) && jours < (30*3))
 		return "Pour dans 2 mois";
-	else if (jours > (30*3) && jours <= (30*4))
+	else if (jours >= (30*3) && jours < (30*4))
 		return "Pour dans 3 mois";
-	else if (jours > (30*4) && jours <= (30*5))
+	else if (jours >= (30*4) && jours < (30*5))
 		return "Pour dans 4 mois";
-	else if (jours > (30*5) && jours <= (30*6))
+	else if (jours >= (30*5) && jours < (30*6))
 		return "Pour dans 5 mois";
-	else if (jours > (30*6) && jours <= (30*7))
+	else if (jours >= (30*6) && jours < (30*7))
 		return "Pour dans 6 mois";
-	else if (jours > (30*7) && jours <= (30*8))
+	else if (jours >= (30*7) && jours <= (30*8))
 		return "Pour dans 7 mois";
 	else if (jours > 240)
 		return "Pour dans trop longtemps (tu t'es pas trompé de date ?)";
