@@ -156,19 +156,34 @@ const trouverMatière = (source) => {
  * @return un libellé particulier si le nombre de jour correspond a un nombre particulier, sinon return le nombre de jours
  */
 const libelleJour = (jours) => {
-	if(jours === 0)
+	if (jours === 0)
 		return "Pour aujourd'hui";
-	if(jours === 1)
+	else if (jours === 1)
 		return "Pour demain";
-	if(jours === 2)
+	else if (jours === 2)
 		return "Pour après-demain";	
-	if(jours === 7)
+	else if (jours === 7)
 		return "Pour dans une semaine";
-	if(jours >= 28 && jours < 250)
-		return "Pour dans un mois";
-	if(jours >= 250)
+	else if (jours >= 28 && jours <= 31)
+		return "Pour dans 1 mois";
+	else if (jours >= (28*2) && jours <= (31*2))
+		return "Pour dans 2 mois";
+	else if (jours >= (28*3) && jours <= (31*3))
+		return "Pour dans 3 mois";
+	else if (jours >= (28*4) && jours <= (31*4))
+		return "Pour dans 4 mois";
+	else if (jours >= (28*5) && jours <= (31*5))
+		return "Pour dans 5 mois";
+	else if (jours >= (28*6) && jours <= (31*6))
+		return "Pour dans 6 mois";
+	else if (jours >= (28*7) && jours <= (31*7))
+		return "Pour dans 7 mois";
+	else if (jours >= (28*8) && jours <= (31*8+1))
+		return "Pour dans 8 mois";
+	else if (jours > 250)
 		return "Pour dans trop longtemps (tu t'es pas trompé de date ?)";
-	return jours + " jours";
+	else
+		return `Pour dans ${jours} jours`;
 };
 
 
