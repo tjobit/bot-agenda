@@ -2,8 +2,11 @@ require("better-logging")(console);
 const Discord = require("discord.js");
 const botClient = new Discord.Client();
 const config = require("../config.json");
+
+const fs = require("fs");
 const asciiCats = require("ascii-cats");
 const cron = require("cron");
+
 const embed = require("./embeds");
 const ajout = require("./ajoutDB");
 const utils = require("./utils");
@@ -12,6 +15,14 @@ const suppr = require("./supprDB");
 const modif = require("./modifDB");
 const syncDB = require("./syncDB");
 
+if (!fs.existsSync("./devoirs.json")) {
+	const defaultDB = { "groups": [] };
+	console.warn("Data base fichier introuvable");
+	// eslint-disable-next-line quotes
+	fs.writeFileSync("./src/devoirs.json", JSON.stringify(defaultDB));
+	console.warn("Data base fichier créé avec son contenu par défaut");
+}
+
 /**
  * Au démarrage du bot
  */
@@ -19,7 +30,6 @@ botClient.on("ready", () => {
 	//Status du bot
 	botClient.user.setActivity("!help-agenda");
 
-	console.clear();
 	console.log(
 		"\n=============================\n"
 		+ asciiCats("nyan")
@@ -35,7 +45,9 @@ botClient.on("ready", () => {
 
 	scheduledMessage.start();
 
-	syncDB.syncDB(require("./devoirs.json"), botClient);
+	if (fs.existsSync("./devoirs.json")) {
+		syncDB.syncDB(require("./devoirs.json"), botClient);
+	}
 
 });
 

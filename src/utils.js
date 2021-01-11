@@ -45,7 +45,7 @@ const getResponse = async (msg, question, help = null, questionMsgList = null) =
 			const filter = m => m.author.id === msg.author.id;
 			msg.channel.awaitMessages(filter, { max: 1, time: 30000, errors: ["time"] })
 				.then(collected => {
-					if (! collected.first().content.startsWith(config.prefix)) {
+					if (!collected.first().content.startsWith(config.prefix)) {
 						resolve([collected.first(), questMsg]);
 						questMsg.edit(embed.questionEmbed(question, trouverMatière(collected.first().content)));
 					} else {
@@ -88,7 +88,7 @@ const updateDbFile = (db) => {
 	}
 
 	if (db.groups.length > 0)
-		fs.writeFileSync("./src/db.back", JSON.stringify(db));
+		fs.writeFileSync("./src/db.bak", JSON.stringify(db));
 
 	console.info("Fichier mit à jour");
 };
@@ -99,8 +99,8 @@ const updateDbFile = (db) => {
  * @param msg le message d'origine
  */
 const debugDbFile = (db, msg, onlygroup = false) => {
-	
-	const content = onlygroup ? db.groups[getGroupByID(db.groups,msg.channel.id)] : db; 
+
+	const content = onlygroup ? db.groups[getGroupByID(db.groups, msg.channel.id)] : db;
 
 	msg.reply("```" + JSON.stringify(content, null, 4) + "```").catch(() => { console.warn("Debug : DB trop grande "); });
 	msg.delete();
@@ -115,7 +115,7 @@ const debugDbFileStats = (db, msg) => {
 		devoirNum += group.devoirs.length;
 	});
 
-	msg.reply(`Nb groups : ${groupNum}     Nb devoirs : ${devoirNum}`);	
+	msg.reply(`Nb groups : ${groupNum}     Nb devoirs : ${devoirNum}`);
 };
 
 /**
@@ -205,8 +205,8 @@ const libelleJour = (jours) => {
  * @return le lien moodle affilié à la matière si il existe sinon return le lien du tableau de bord moodle
  */
 const getURL = (matiere) => {
-	for(let i = 0; i < matDB.matières.length; i++) {
-		if(matDB.matières[i].nom == matiere && matDB.matières[i].url)
+	for (let i = 0; i < matDB.matières.length; i++) {
+		if (matDB.matières[i].nom == matiere && matDB.matières[i].url)
 			return matDB.matières[i].url;
 	}
 	return "https://moodle1.u-bordeaux.fr/my/";
