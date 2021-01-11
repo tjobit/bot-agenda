@@ -2,10 +2,8 @@ require("better-logging")(console);
 const Discord = require("discord.js");
 const botClient = new Discord.Client();
 const config = require("../config.json");
-
 const asciiCats = require("ascii-cats");
 const cron = require("cron");
-
 const embed = require("./embeds");
 const ajout = require("./ajoutDB");
 const utils = require("./utils");
