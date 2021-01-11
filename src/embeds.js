@@ -19,11 +19,15 @@ const devoirEmbed = (matiere, date, intitule, numDevoir, jours) => {
 	} else if(jours == 1){
 		couleur = "#ff9b21";
 	}
+
 	
-	const exampleEmbed = new Discord.MessageEmbed().setTitle(matiere)
+	
+	const exampleEmbed = new Discord.MessageEmbed()
+		.setTitle(matiere)
+		.setURL(utils.getURL(matiere))
 		.addFields(
 			{ name: "Date de remise :", value: date },
-			{ name: "Devoirs :", value: intitule },
+			{ name: "Devoir :", value: intitule },
 			{ name: "Temps restant avant remise :", value: utils.libelleJour(jours) }
 		)
 		.setColor(couleur)
@@ -46,7 +50,6 @@ const helpEmbed = () => {
 			{ name: "Modifier un devoir :", value: "!modif-agenda" },
 		)
 		.setColor("#FFFF00");
-	// .setImage("https://www.u-bordeaux.fr/var/ezdemo_site/storage/images/media/site-institutionnel/images/images-blandine-test/banniere-idv-gif-anime/16065-1-fre-FR/Banniere-idv-gif-anime_Grande.gif");
 	return exampleEmbed;
 };
 

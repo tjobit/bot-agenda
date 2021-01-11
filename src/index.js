@@ -2,10 +2,8 @@ require("better-logging")(console);
 const Discord = require("discord.js");
 const botClient = new Discord.Client();
 const config = require("../config.json");
-
 const asciiCats = require("ascii-cats");
 const cron = require("cron");
-
 const embed = require("./embeds");
 const ajout = require("./ajoutDB");
 const utils = require("./utils");
@@ -62,6 +60,18 @@ botClient.on("message", msg => {
 
 		case "debug":
 			utils.debugDbFile(db, msg);
+			break;
+
+		case "debug-group":
+			utils.debugDbFile(db, msg, true);
+			break;
+
+		case "debug-stats":
+			utils.debugDbFileStats(db, msg);
+			break;
+
+		case "sync":
+			syncDB.syncDB(db, botClient);
 			break;
 
 		case "clear-db":

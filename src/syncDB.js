@@ -1,13 +1,24 @@
 require("better-logging")(console);
 const utils = require("./utils");
 const embed = require("./embeds");
+const compteur = require("./compteur");
 
-//Lire la db, lire les channels et syncrhoniser les deux
+
+/**
+ * Lance la sync de la db, lit tout le contenu de la db et le compare avec les salons sur discord.
+ * La fonction vérifie su un message sur discord doit être ajouté supprimé ou modifié 
+ * et se charge donc de syncroniser la bd avec les salons discords
+ * @param db la base de donnée
+ * @param botClient le client du bot
+ */
 const syncDB = async (db, botClient) => {
+	console.info("Synchronisation de la DB !");
+
 	db.groups.forEach(group => {
 		botClient.channels.fetch(group.channelId)
 			.then(channel => {
 				group.devoirs.forEach(devoir => {
+					devoir.jours = compteur.compteur(devoir.date);
 					syncDevoir(db, channel, devoir);
 				});
 			})
@@ -17,12 +28,20 @@ const syncDB = async (db, botClient) => {
 	});
 };
 
-//Check si existe dans son salon, si il doit etre ajouté ou supr ou edité
+
+/**
+ * Sync un devoir avec son salon discord
+ * @param db la base de donnée
+ * @param channel le channel sur lequel le message doit se trouver
+ * @param devoir le devoir en question
+ */
 const syncDevoir = async (db, channel, devoir) => {
 
+	//Embed avec les dernières informations de ce devoir (Tout à jour)
+	//Il sera utilisé uniquement si on en a besoin pour edit ou creer un message
 	const devoirEmbed = embed.devoirEmbed(devoir.matière, devoir.date, devoir.intitulé, devoir.numéro, devoir.jours);
 
-	if (devoir.embedId == null) {
+	if (devoir.embedId == null && devoir.jours >= 0) {
 		await channel.send(devoirEmbed)
 			.then(msg => {
 				console.info(`Message discord du devoir ${devoir.numéro} créé pour la première fois`);
@@ -30,7 +49,7 @@ const syncDevoir = async (db, channel, devoir) => {
 			})
 			.catch(() => console.error(`Impossible de créer le message du devoir ${devoir.numéro}`));
 	} else {
-		//recherche dans salon -> fetch
+		//recherche dans salon
 		channel.messages.fetch(devoir.embedId)
 
 			//si je trouve
@@ -51,7 +70,7 @@ const syncDevoir = async (db, channel, devoir) => {
 					if (devoir.jours < 0) {
 						msg.delete()
 							.then(() => {
-								console.info(`Message discord du devoir ${devoir.numéro} supprimé car ce devoir est trop vieux`);
+								console.warn(`Message discord du devoir ${devoir.numéro} supprimé du salon et de la db car ce devoir est trop vieux`);
 								supprDbSync(db, devoir.numéro);
 							})
 							.catch(e => { console.error(e); });
@@ -73,8 +92,17 @@ const syncDevoir = async (db, channel, devoir) => {
 	}
 };
 
+
+/**
+ * Prend en charge le cas ou un message n'est pas trouvé dans un salon discord
+ * Si le message doit bien exister alors il est recréé
+ * @param db la base de donnée 
+ * @param devoir le devoir en question
+ * @param channel le channel en question 
+ * @param devoirEmbed l'embed correspondant aux devoirs
+ */
 const messageNonTrouveDansSalonDiscord = (db, devoir, channel, devoirEmbed) => {
-	console.warn("Un devoir de la db ne correpond pas à un message discord");
+	console.warn(`Le devoir ${devoir.numéro} ne correspond à aucun message discord`);
 	//Si il doit encore exister
 	if (devoir.jours >= 0) {
 		channel.send(devoirEmbed)
@@ -85,12 +113,19 @@ const messageNonTrouveDansSalonDiscord = (db, devoir, channel, devoirEmbed) => {
 			.catch(() => console.error(`Impossible de créer le message du devoir ${devoir.numéro}`));
 	} else {//Si ce devoir est dans la db mais plus dans le salon et qu'il doit ne plus exister
 		if (devoir.jours < 0) {
-			console.warn(`Devoir ${devoir.numéro} supprimé de la bd`);
+			console.warn(`Ddevoir ${devoir.numéro} supprimé de la db car ce devoir est trop vieux`);
 			supprDbSync(db, devoir.numéro);
 		}
 	}
 };
 
+/**
+ * Regarde si deux embeds présentent des différences qui pourraient 
+ * justifier une mise à jour de message
+ * @param embed1 premier embed a comparer 
+ * @param embed2 deuxième embed a comparer
+ * @return vrai si les embeds sont différents
+ */
 const embedDiff = (embed1, embed2) => {
 	if (embed1.title != embed2.title)
 		return true;
@@ -103,6 +138,12 @@ const embedDiff = (embed1, embed2) => {
 	return false;
 };
 
+/**
+ * Change l'attribut embedID d'un devoir dans la bd
+ * @param db la db
+ * @param numeroDev le numero du devoir à changer
+ * @param newEmbedID le nouvel id
+ */
 const changeEmbedId = (db, numeroDev, newEmbedId) => {
 	for (let i = 0; i < db.groups.length; i++) {
 		for (let j = 0; j < db.groups[i].devoirs.length; j++) {
@@ -114,11 +155,16 @@ const changeEmbedId = (db, numeroDev, newEmbedId) => {
 	utils.updateDbFile(db);
 };
 
+/**
+ * Supprime un devoir dans la bd à partir de son numéro
+ * @param db la db
+ * @param numeroDev le numero du devoir
+ */
 const supprDbSync = (db, numeroDev) => {
 	for (let i = 0; i < db.groups.length; i++) {
 		for (let j = 0; j < db.groups[i].devoirs.length; j++) {
-			if (db.groups[i].devoirs[j].numéro === numeroDev) {
-				db.groups[i].devoirs[j].splice(i, 1);
+			if (db.groups[i].devoirs[j].numéro == numeroDev) {
+				db.groups[i].devoirs.splice(j, 1);
 			}
 		}
 	}

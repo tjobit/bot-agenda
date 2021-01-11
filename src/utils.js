@@ -35,6 +35,7 @@ const tempMsg = (content, channel, time = 5000) => {
  * @param msg le message d'origine
  * @param question Le text de la question que le bot posera
  * @param help un message en dessous de la question (facultatif)
+ * @param questionMsgList 
  * @return la premesse qui resoud un tableau de deux elements : [Reponse utilisateur , Message du bot comprenent la question]
  */
 const getResponse = async (msg, question, help = null, questionMsgList = null) => {
@@ -97,16 +98,31 @@ const updateDbFile = (db) => {
  * @param db le contenu du fichier a mettre a jour
  * @param msg le message d'origine
  */
-const debugDbFile = (db, msg) => {
-	msg.reply("```" + JSON.stringify(db, null, 4) + "```").catch(() => { console.log(" DB trop grande "); });
+const debugDbFile = (db, msg, onlygroup = false) => {
+	
+	const content = onlygroup ? db.groups[getGroupByID(db.groups,msg.channel.id)] : db; 
+
+	msg.reply("```" + JSON.stringify(content, null, 4) + "```").catch(() => { console.warn("Debug : DB trop grande "); });
 	msg.delete();
 	console.info("Discord debug");
+};
+
+const debugDbFileStats = (db, msg) => {
+	const groupNum = db.groups.length;
+
+	let devoirNum = 0;
+	db.groups.forEach(group => {
+		devoirNum += group.devoirs.length;
+	});
+
+	msg.reply(`Nb groups : ${groupNum}     Nb devoirs : ${devoirNum}`);	
 };
 
 /**
  * Ecrase le contenu de la db par un tableau groups vierge
  * @param db le contenu du fichier a mettre a jour
  * @param msg le message d'origine
+ * @return db modifié
  */
 const clearDbFile = (db, msg) => {
 	msg.delete();
@@ -161,6 +177,11 @@ const trouverMatière = (source) => {
 	return source;
 };
 
+/**
+ * Remplace le nombre de jours par une string selon certaines conditions
+ * @param jours le nombre de jours avant la remise
+ * @return un libellé particulier si le nombre de jour correspond a un nombre particulier, sinon return le nombre de jours
+ */
 const libelleJour = (jours) => {
 	if (jours === 0)
 		return "Pour aujourd'hui";
@@ -177,6 +198,22 @@ const libelleJour = (jours) => {
 	return jours + " jours";
 };
 
+
+/**
+ * Recupere l'url donné pour chaque matière dans son json si il est indiqué 
+ * @param matiere le nom de la matière 
+ * @return le lien moodle affilié à la matière si il existe sinon return le lien du tableau de bord moodle
+ */
+const getURL = (matiere) => {
+	for(let i = 0; i < matDB.matières.length; i++) {
+		if(matDB.matières[i].nom == matiere && matDB.matières[i].url)
+			return matDB.matières[i].url;
+	}
+	return "https://moodle1.u-bordeaux.fr/my/";
+};
+
+exports.getURL = getURL;
+exports.debugDbFileStats = debugDbFileStats;
 exports.getGroupByID = getGroupByID;
 exports.tempMsg = tempMsg;
 exports.updateDbFile = updateDbFile;
