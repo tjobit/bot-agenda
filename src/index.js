@@ -64,6 +64,14 @@ botClient.on("message", msg => {
 			utils.debugDbFile(db, msg);
 			break;
 
+		case "debug-group":
+			utils.debugDbFile(db, msg, true);
+			break;
+
+		case "debug-stats":
+			utils.debugDbFileStats(db, msg);
+			break;
+
 		case "sync":
 			syncDB.syncDB(db, botClient);
 			break;

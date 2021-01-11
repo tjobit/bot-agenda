@@ -84,10 +84,24 @@ const updateDbFile = (db) => {
  * @param db le contenu du fichier a mettre a jour
  * @param msg le message d'origine
  */
-const debugDbFile = (db, msg) => {
-	msg.reply("```" + JSON.stringify(db, null, 4) + "```").catch(() => { console.log(" DB trop grande "); });
+const debugDbFile = (db, msg, onlygroup = false) => {
+	
+	const content = onlygroup ? db.groups[getGroupByID(db.groups,msg.channel.id)] : db; 
+
+	msg.reply("```" + JSON.stringify(content, null, 4) + "```").catch(() => { console.warn("Debug : DB trop grande "); });
 	msg.delete();
 	console.info("Discord debug");
+};
+
+const debugDbFileStats = (db, msg) => {
+	const groupNum = db.groups.length;
+
+	let devoirNum = 0;
+	db.groups.forEach(group => {
+		devoirNum += group.devoirs.length;
+	});
+
+	msg.reply(`Nb groups : ${groupNum}     Nb devoirs : ${devoirNum}`);	
 };
 
 /**
@@ -164,6 +178,7 @@ const libelleJour = (jours) => {
 	return jours + " jours";
 };
 
+exports.debugDbFileStats = debugDbFileStats;
 exports.getGroupByID = getGroupByID;
 exports.tempMsg = tempMsg;
 exports.updateDbFile = updateDbFile;
