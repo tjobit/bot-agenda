@@ -2,6 +2,7 @@ require("better-logging")(console);
 const embed = require("./embeds");
 const fs = require("fs");
 const matDB = require("./matieres.json");
+const config = require("../config.json");
 
 /**
  * Retourne la position d'un groupe dans le tableau groups de la db
@@ -43,8 +44,20 @@ const getResponse = async (msg, question, help = null, questionMsgList = null) =
 			const filter = m => m.author.id === msg.author.id;
 			msg.channel.awaitMessages(filter, { max: 1, time: 30000, errors: ["time"] })
 				.then(collected => {
-					resolve([collected.first(), questMsg]);
-					questMsg.edit(embed.questionEmbed(question, trouverMatière(collected.first().content)));
+					if (! collected.first().content.startsWith(config.prefix)) {
+						resolve([collected.first(), questMsg]);
+						questMsg.edit(embed.questionEmbed(question, trouverMatière(collected.first().content)));
+					} else {
+						console.warn("Reponse au formulaire par une commande du bot -> annulation");
+						if (questMsg)
+							questMsg.delete();
+						if (questionMsgList != null) {
+							//On supprime tous les messages contenant les questions
+							questionMsgList.forEach(element => {
+								element.delete().catch(() => console.debug("Message de question déjà supprimé"));
+							});
+						}
+					}
 				})
 				.catch(() => {
 					console.warn("Question timeout");
@@ -149,17 +162,17 @@ const trouverMatière = (source) => {
 };
 
 const libelleJour = (jours) => {
-	if(jours === 0)
+	if (jours === 0)
 		return "Pour aujourd'hui";
-	if(jours === 1)
+	if (jours === 1)
 		return "Pour demain";
-	if(jours === 2)
-		return "Pour après-demain";	
-	if(jours === 7)
+	if (jours === 2)
+		return "Pour après-demain";
+	if (jours === 7)
 		return "Pour dans une semaine";
-	if(jours >= 28 && jours < 250)
+	if (jours >= 28 && jours < 250)
 		return "Pour dans un mois";
-	if(jours >= 250)
+	if (jours >= 250)
 		return "Pour dans trop longtemps (tu t'es pas trompé de date ?)";
 	return jours + " jours";
 };
