@@ -66,10 +66,6 @@ botClient.on("message", msg => {
 			syncDB.syncDB(db, botClient);
 			break;
 
-		case "clear-db":
-			utils.clearDbFile(db, msg);
-			return;
-
 		case "help-agenda":
 			msg.channel.send(embed.helpEmbed());
 			break;
