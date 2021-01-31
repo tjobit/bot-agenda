@@ -1,2 +1,4 @@
 node_modules
 config.json
+src/devoirs.json
+src/db.bak

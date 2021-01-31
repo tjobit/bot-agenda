@@ -2,6 +2,7 @@ require("better-logging")(console);
 const embed = require("./embeds");
 const fs = require("fs");
 const matDB = require("./matieres.json");
+const config = require("../config.json");
 
 /**
  * Retourne la position d'un groupe dans le tableau groups de la db
@@ -44,8 +45,20 @@ const getResponse = async (msg, question, help = null, questionMsgList = null) =
 			const filter = m => m.author.id === msg.author.id;
 			msg.channel.awaitMessages(filter, { max: 1, time: 30000, errors: ["time"] })
 				.then(collected => {
-					resolve([collected.first(), questMsg]);
-					questMsg.edit(embed.questionEmbed(question, trouverMatière(collected.first().content)));
+					if (!collected.first().content.startsWith(config.prefix)) {
+						resolve([collected.first(), questMsg]);
+						questMsg.edit(embed.questionEmbed(question, trouverMatière(collected.first().content)));
+					} else {
+						console.warn("Reponse au formulaire par une commande du bot -> annulation");
+						if (questMsg)
+							questMsg.delete();
+						if (questionMsgList != null) {
+							//On supprime tous les messages contenant les questions
+							questionMsgList.forEach(element => {
+								element.delete().catch(() => console.debug("Message de question déjà supprimé"));
+							});
+						}
+					}
 				})
 				.catch(() => {
 					console.warn("Question timeout");
@@ -75,7 +88,7 @@ const updateDbFile = (db) => {
 	}
 
 	if (db.groups.length > 0)
-		fs.writeFileSync("./src/db.back", JSON.stringify(db));
+		fs.writeFileSync("./src/db.bak", JSON.stringify(db));
 
 	console.info("Fichier mit à jour");
 };
@@ -85,10 +98,24 @@ const updateDbFile = (db) => {
  * @param db le contenu du fichier a mettre a jour
  * @param msg le message d'origine
  */
-const debugDbFile = (db, msg) => {
-	msg.reply("```" + JSON.stringify(db, null, 4) + "```").catch(() => { console.log(" DB trop grande "); });
+const debugDbFile = (db, msg, onlygroup = false) => {
+
+	const content = onlygroup ? db.groups[getGroupByID(db.groups, msg.channel.id)] : db;
+
+	msg.reply("```" + JSON.stringify(content, null, 4) + "```").catch(() => { console.warn("Debug : DB trop grande "); });
 	msg.delete();
 	console.info("Discord debug");
+};
+
+const debugDbFileStats = (db, msg) => {
+	const groupNum = db.groups.length;
+
+	let devoirNum = 0;
+	db.groups.forEach(group => {
+		devoirNum += group.devoirs.length;
+	});
+
+	msg.reply(`Nb groups : ${groupNum}     Nb devoirs : ${devoirNum}`);
 };
 
 /**
@@ -98,12 +125,12 @@ const debugDbFile = (db, msg) => {
  * @return db modifié
  */
 const clearDbFile = (db, msg) => {
-	msg.delete();
-	// eslint-disable-next-line quotes
-	db = JSON.parse('{ "groups": [] }');
-	updateDbFile(db);
-	console.warn("DATABASE RESET");
-	return db;
+	if(msg.member.hasPermission("ADMINISTRATOR")){
+		msg.delete();
+		
+		updateDbFile(db);
+		console.warn("DATABASE RESET");
+	}
 };
 
 /**
@@ -191,14 +218,15 @@ const libelleJour = (jours) => {
  * @return le lien moodle affilié à la matière si il existe sinon return le lien du tableau de bord moodle
  */
 const getURL = (matiere) => {
-	for(let i = 0; i < matDB.matières.length; i++) {
-		if(matDB.matières[i].nom == matiere && matDB.matières[i].url)
+	for (let i = 0; i < matDB.matières.length; i++) {
+		if (matDB.matières[i].nom == matiere && matDB.matières[i].url)
 			return matDB.matières[i].url;
 	}
 	return "https://moodle1.u-bordeaux.fr/my/";
 };
 
 exports.getURL = getURL;
+exports.debugDbFileStats = debugDbFileStats;
 exports.getGroupByID = getGroupByID;
 exports.tempMsg = tempMsg;
 exports.updateDbFile = updateDbFile;
