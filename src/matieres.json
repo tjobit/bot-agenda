@@ -1,31 +1,98 @@
 {
     "matières": [
         {
-            "nom" : "Algo-Prog",
-            "url" : "https://moodle1.u-bordeaux.fr/course/view.php?id=3602",
+            "nom": "Interface Homme-Machine",
+            "url": "https://moodle1.u-bordeaux.fr/my/",
             "alias": [
-                "ap",
-                "algo",
+                "Interface",
+                "Homme",
+                "Machine",
+                "Hommes",
+                "Machines",
+                "IHM"
+            ]
+        },
+        {
+            "nom": "Graphes et langages",
+            "url": "https://moodle1.u-bordeaux.fr/my/",
+            "alias": [
+                "Graphes",
+                "Graphe"
+            ]
+        },
+        {
+            "nom": "Prog Bas Niveau",
+            "url": "https://moodle1.u-bordeaux.fr/my/",
+            "alias": [
+                "Bas",
+                "Niveau",
+                "BN",
+                "Assembleur"
+            ]
+        },
+        {
+            "nom": "Droit ಠ_๏",
+            "url": "https://moodle1.u-bordeaux.fr/my/",
+            "alias": [
+                "Droit"
+            ]
+        },
+        {
+            "nom": "Méthodes Agiles",
+            "url": "https://moodle1.u-bordeaux.fr/my/",
+            "alias": [
+                "Méthodes",
+                "Methodes",
+                "Methode",
+                "Méthode",
+                "Agiles",
+                "Agile"
+            ]
+        },
+        {
+            "nom": "Analyse",
+            "url": "https://moodle1.u-bordeaux.fr/my/",
+            "alias": [
+                "Analyse",
+                "Anal",
+                "Maths",
+                "Math"
+            ]
+        },
+        {
+            "nom": "SIEF",
+            "url": "https://moodle1.u-bordeaux.fr/my/",
+            "alias": [
+                "Sief"
+            ]
+        },
+        {
+            "nom": "Concéption OO",
+            "url": "https://moodle1.u-bordeaux.fr/my/",
+            "alias": [
+                "Modélisation",
+                "Modelisation",
+                "Orientée",
+                "Conception",
+                "Mod"
+            ]
+        },
+        {
+            "nom": "Prog OO",
+            "url": "https://moodle1.u-bordeaux.fr/my/",
+            "alias": [
+                "OO",
+                "Orienté",
                 "prog",
-                "algo-prog",
-                "algoprog"
+                "porg",
+                "porn",
+                "Prog OO",
+                "Programmation"
             ]
         },
         {
-            "nom" : "Système",
-            "url" : "https://moodle1.u-bordeaux.fr/course/view.php?id=1438",
-            "alias": [
-                "sys",
-                "syst",
-                "system",
-                "système",
-                "systeme",
-                "feu"
-            ]
-        },
-        {
-            "nom" : "ACSI-BD",
-            "url" : "https://moodle1.u-bordeaux.fr/course/view.php?id=6064",
+            "nom": "BD",
+            "url": "https://moodle1.u-bordeaux.fr/my/",
             "alias": [
                 "asci",
                 "acsi",
@@ -35,91 +102,41 @@
             ]
         },
         {
-            "nom" : "Archi",
-            "alias": [
-                "arch",
-                "archi",
-                "archit",
-                "architecture"
-            ]
-        },
-        {
-            "nom" : "Projet",
+            "nom": "Projet",
             "alias": [
                 "proj",
                 "projet"
             ]
         },
         {
-            "nom" : "WEB",
-            "url" : "https://moodle1.u-bordeaux.fr/course/view.php?id=1844",
-            "alias": [
-                "wb",
-                "html",
-                "css",
-                "web",
-                "js"
-            ]
-        },
-        {
-            "nom" : "Algèbre-linéaire",
-            "url" : "https://moodle1.u-bordeaux.fr/course/view.php?id=2373",
-            "alias": [
-                "maths",
-                "mathematique",
-                "mathématique",
-                "math",
-                "algebre",
-                "algèbre",
-                "linéaire",
-                "lineaire",
-                "line"
-            ]
-        },
-        {
-            "nom" : "Env-Economique",
-            "alias": [
-                "environnement",
-                "envi",
-                "éco",
-                "économie",
-                "eco"
-            ]
-        },
-        {
-            "nom" : "Fct-Organisations",
-            "alias": [
-                "orga",
-                "organisation",
-                "fonctionnement",
-                "fonct"
-            ]
-        },
-        {
-            "nom" : "Expression-Communication",
-            "url" : "https://moodle1.u-bordeaux.fr/course/view.php?id=1920",
+            "nom": "Expression-Communication",
+            "url": "https://moodle1.u-bordeaux.fr/my/",
             "alias": [
                 "expression",
                 "exp",
                 "com",
-                "communication"
+                "communication",
+                "Ec",
+                "Ec2"
             ]
         },
         {
-            "nom" : "Anglais",
-            "url" : "https://moodle1.u-bordeaux.fr/course/view.php?id=2387",
+            "nom": "Anglais",
+            "url": "https://moodle1.u-bordeaux.fr/my/",
             "alias": [
                 "anglais",
                 "english",
                 "inter",
-                "eng"
+                "eng",
+                "ang"
             ]
         },
         {
-            "nom" : "PPP",
-            "url" : "https://moodle1.u-bordeaux.fr/course/view.php?id=1920",
+            "nom": "PPP2",
+            "url": "https://moodle1.u-bordeaux.fr/my/",
             "alias": [
-                "ppp"
+                "ppp",
+                "ppp2"
             ]
         }
     ]

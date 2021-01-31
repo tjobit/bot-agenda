@@ -31,7 +31,6 @@ botClient.on("ready", () => {
 
 	try {
 		var data = fs.readFileSync("./src/devoirs.json", "utf8");
-		console.log(data); 
 		db = JSON.parse(data);   
 	} catch(e) {
 		console.log("Error loading file :", e.stack);
@@ -68,7 +67,6 @@ botClient.on("message", msg => {
 
 	try {
 		var data = fs.readFileSync("./src/devoirs.json", "utf8");
-		console.log(data); 
 		db = JSON.parse(data);   
 	} catch(e) {
 		console.log("Error loading file :", e.stack);
