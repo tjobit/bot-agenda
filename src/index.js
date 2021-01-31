@@ -15,7 +15,7 @@ const suppr = require("./supprDB");
 const modif = require("./modifDB");
 const syncDB = require("./syncDB");
 
-if (!fs.existsSync("./devoirs.json")) {
+if (!fs.existsSync("./src/devoirs.json")) {
 	const defaultDB = { "groups": [] };
 	console.warn("Data base fichier introuvable");
 	// eslint-disable-next-line quotes
@@ -27,6 +27,17 @@ if (!fs.existsSync("./devoirs.json")) {
  * Au démarrage du bot
  */
 botClient.on("ready", () => {
+	let db;
+
+	try {
+		var data = fs.readFileSync("./src/devoirs.json", "utf8");
+		console.log(data); 
+		db = JSON.parse(data);   
+	} catch(e) {
+		console.log("Error loading file :", e.stack);
+		return;
+	}
+
 	//Status du bot
 	botClient.user.setActivity("!help-agenda");
 
@@ -39,23 +50,30 @@ botClient.on("ready", () => {
 	);
 
 	let scheduledMessage = new cron.CronJob("00 00 01 * * *", () => {
-		syncDB.syncDB(require("./devoirs.json"), botClient);
+		syncDB.syncDB(db, botClient);
 		console.info("cron update");
 	});
 
 	scheduledMessage.start();
 
-	if (fs.existsSync("./devoirs.json")) {
-		syncDB.syncDB(require("./devoirs.json"), botClient);
-	}
-
+	
+	syncDB.syncDB(db, botClient);
 });
 
 /**
  * Des qu'un message sur le serveur ou le bot est présent est reçu
  */
 botClient.on("message", msg => {
-	let db = require("./devoirs.json");
+	let db;
+
+	try {
+		var data = fs.readFileSync("./src/devoirs.json", "utf8");
+		console.log(data); 
+		db = JSON.parse(data);   
+	} catch(e) {
+		console.log("Error loading file :", e.stack);
+		return;
+	}
 
 	//On regarde si le message commence bien par le prefix (!)
 	if (!msg.content.startsWith(config.prefix))//Si le message ne commence pas par le prefix du config.json
@@ -70,6 +88,12 @@ botClient.on("message", msg => {
 			ajout.ajoutDb(db, msg, botClient);
 			break;
 
+		case "clear-db":
+			// eslint-disable-next-line quotes
+			db = JSON.parse('{ "groups": [] }');
+			utils.clearDbFile(db, msg);
+			break;
+		
 		case "debug":
 			utils.debugDbFile(db, msg);
 			break;

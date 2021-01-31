@@ -125,12 +125,12 @@ const debugDbFileStats = (db, msg) => {
  * @return db modifié
  */
 const clearDbFile = (db, msg) => {
-	msg.delete();
-	// eslint-disable-next-line quotes
-	db = JSON.parse('{ "groups": [] }');
-	updateDbFile(db);
-	console.warn("DATABASE RESET");
-	return db;
+	if(msg.member.hasPermission("ADMINISTRATOR")){
+		msg.delete();
+		
+		updateDbFile(db);
+		console.warn("DATABASE RESET");
+	}
 };
 
 /**
