@@ -1,0 +1,17 @@
+name: Bot Agenda Updater
+
+on:
+  push:
+    branches:
+      - production
+
+jobs:
+  deploy:
+    name: Deployment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send webhook
+        uses: fjogeleit/http-request-action@master
+        with:
+          url: ${{ secrets.WEBHOOK_URL }}
+          method: 'POST'
