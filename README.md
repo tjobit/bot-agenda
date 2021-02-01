@@ -2,3 +2,5 @@
 # BotAgenda
 ###### Authors
 > Jobit Tomm, Riboulet Célian
+
+![Bot Agenda Updater](https://github.com/tjobit/bot-agenda/workflows/Bot%20Agenda%20Updater/badge.svg)
