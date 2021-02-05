@@ -17,7 +17,8 @@
             "url": "https://moodle1.u-bordeaux.fr/my/",
             "alias": [
                 "Graphes",
-                "Graphe"
+                "Graphe",
+                "GL"
             ]
         },
         {
@@ -27,6 +28,7 @@
                 "Bas",
                 "Niveau",
                 "BN",
+                "PBN",
                 "Assembleur"
             ]
         },
@@ -74,13 +76,15 @@
                 "Modelisation",
                 "Orientée",
                 "Conception",
-                "Mod"
+                "Mod",
+                "COO"
             ]
         },
         {
             "nom": "Prog OO",
             "url": "https://moodle1.u-bordeaux.fr/my/",
             "alias": [
+                "POO",
                 "OO",
                 "Orienté",
                 "prog",
