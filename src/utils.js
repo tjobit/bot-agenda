@@ -43,7 +43,7 @@ const getResponse = async (msg, question, help = null, questionMsgList = null) =
 	return new Promise(
 		function (resolve) {
 			const filter = m => m.author.id === msg.author.id;
-			msg.channel.awaitMessages(filter, { max: 1, time: 30000, errors: ["time"] })
+			msg.channel.awaitMessages(filter, { max: 1, time: 120000, errors: ["time"] })
 				.then(collected => {
 					if (!collected.first().content.startsWith(config.prefix)) {
 						resolve([collected.first(), questMsg]);
