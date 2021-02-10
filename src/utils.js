@@ -169,7 +169,7 @@ const dateValide = (date) => {
 const trouverMatière = (source) => {
 	matDB.matières.forEach(mat => {
 		mat.alias.forEach(alias => {
-			if (source.toUpperCase().includes(alias.toUpperCase())) {
+			if (source.toUpperCase() == alias.toUpperCase()) {
 				source = mat.nom;
 			}
 		});
