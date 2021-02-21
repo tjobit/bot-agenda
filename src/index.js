@@ -131,5 +131,6 @@ botClient.on("message", msg => {
 
 });
 
+
 //Bot login
 botClient.login(config.token);
