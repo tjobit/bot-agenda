@@ -10,10 +10,12 @@ let formUsed = false;
  * @param msg le message d'origine
  */
 const ajoutDb = async (db, msg, botClient) => {
+	
 	//if(formUsed){
 		//utils.tempMsg("Quelqu'un est déjà en train d'ajouter un devoir, attends un peu.", msg.channel);
 		//return;
 	//}
+	
 	formUsed = true;
 	console.info("Ajout d'un devoir");
 
